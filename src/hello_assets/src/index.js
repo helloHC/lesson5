@@ -53,29 +53,25 @@ const formatData = (date, pattern, isZero) => {
   }
 }
 
-// async function post() {
-//   const post_button = document.getElementById('post');
-//   const error = document.getElementById("error");
-//   error.innerText = "";
-//   post_button.disabled = true;
-//   const textarea = document.getElementById("message");
-//   const otp = document.getElementById("otp").value;
-//   const text = textarea.value;
-//   try {
-//     await hello.post(otp, text);
-//     textarea.value = "";
-//     load_posts()
-//   } catch (err) {
-//     console.log(err);
-//     error.innerText = "发布失败";
-//   }
-//   post_button.disabled = false;
-// }
+async function post() {
+  const error = document.getElementById("error");
+  error.innerText = "";
+  const textarea = document.getElementById("message");
+  const otp = document.getElementById("otp").value;
+  const text = textarea.value;
+  try {
+    await hello.post(otp, text);
+    textarea.value = "";
+    // load_posts()
+  } catch (err) {
+    console.log(err);
+    error.innerText = "发布失败";
+  }
+}
 
 // let num_posts = 0;
 const getPostsList = async () => {
-  const posts = await hello.timeline(new Date().getTime());
-  return posts;
+  return await hello.timeline(new Date().getTime());
 }
 
 const renderPostsList = _posts => {
@@ -109,15 +105,19 @@ const renderPostsList = _posts => {
 // }
 
 const getFollowList = async () => {
-  const res = await hello.follows();
-  const fragement = document.createDocumentFragment();
-  res.forEach(principal => {
-    const follower = document.createElement("p");
-    follower.innerText = principal.toString();
-    follower.setAttribute('principal', principal.toString())
-    fragement.appendChild(follower);
-  })
-  document.querySelector(".follow-list").appendChild(fragement)
+  try {
+    const res = await hello.follows();
+    const fragement = document.createDocumentFragment();
+    res.forEach(principal => {
+      const follower = document.createElement("p");
+      follower.innerText = principal.toString();
+      follower.setAttribute('principal', principal.toString())
+      fragement.appendChild(follower);
+    })
+    document.querySelector(".follow-list").appendChild(fragement)
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 function load() {
@@ -129,9 +129,15 @@ function load() {
   getPostsList().then(res => {
     postsList = res;
     renderPostsList(res)
+  }).catch(err => {
+    console.log(err);
   })
 
   getFollowList();
+
+  document.querySelector("#post").addEventListener('click', function (e) {
+    post();
+  })
 
   document.querySelector(".follow-list").addEventListener('click', function (e) {
     const _this = e.target;

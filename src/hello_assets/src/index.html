@@ -8,6 +8,10 @@
   <link rel="icon" href="favicon.ico" />
   <title>Microblog</title>
   <style>
+    label {
+      margin-right: 10px;
+    }
+
     .content-wrap,
     .reset-btn {
       display: flex;
@@ -16,15 +20,51 @@
       align-items: center;
     }
 
+    #post,
+    #followBtn,
     .reset-btn,
     .follow-list p {
       cursor: pointer;
+    }
+
+    #post,
+    #followBtn {
+      margin: 0 20px;
+    }
+
+    body .content-wrap:not(:first-child) {
+      margin-top: 20px;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      max-width: 100px;
+      border: 1px solid #000;
+      border-radius: 4px;
+    }
+
+    .reset-btn {
+      margin: 0 auto;
     }
   </style>
 </head>
 
 <body>
   <h1 class="content-wrap">Microblog</h1>
+  <section class="content-wrap" style="flex-direction: row;">
+    <label for="otp">密码</label>
+    <input type="text" id="otp">
+  </section>
+  <section class="content-wrap" style="flex-direction: row;">
+    <label for="message">发布内容</label>
+    <textarea id="message"></textarea>
+    <div id="post" class="btn">发布</div>
+    <span id="error"></span>
+  </section>
+  <section class="content-wrap">
+    <div class="tit">关注消息列表</div>
+    <div id="posts"></div>
+  </section>
   <!-- <main>
     <label for="message">发布</label>
     <textarea id="message"></textarea>
@@ -41,7 +81,7 @@
     <div class="tit">关注列表</div>
     <div class="follow-list"></div>
   </section>
-  <div class="reset-btn">还原</div>
+  <div class="reset-btn btn">还原</div>
 </body>
 
 </html>
