@@ -1,22 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
-    <title>hello</title>
-    <base href="/" />
-    <link rel="icon" href="favicon.ico" />
-    <link type="text/css" rel="stylesheet" href="main.css" />
-  </head>
-  <body>
-    <main>
-      <img src="logo.png" alt="DFINITY logo" />
-      <form action="#">
-        <label for="name">Enter your name: &nbsp;</label>
-        <input id="name" alt="Name" type="text" />
-        <button type="submit">Click Me!</button>
-      </form>
-      <section id="greeting"></section>
-    </main>
-  </body>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width" />
+  <base href="/" />
+  <link rel="icon" href="favicon.ico" />
+  <title>Microblog</title>
+  <style>
+    .content-wrap,
+    .reset-btn {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .reset-btn,
+    .follow-list p {
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <h1 class="content-wrap">Microblog</h1>
+  <!-- <main>
+    <label for="message">发布</label>
+    <textarea id="message"></textarea>
+    <label for="otp">密码</label>
+    <input type="text" id="otp">
+    <button id="post">发布</button>
+    <span id="error"></span>
+  </main> -->
+  <section class="content-wrap">
+    <div class="tit">关注消息列表</div>
+    <div id="posts"></div>
+  </section>
+  <section class="content-wrap">
+    <div class="tit">关注列表</div>
+    <div class="follow-list"></div>
+  </section>
+  <div class="reset-btn">还原</div>
+</body>
+
 </html>
