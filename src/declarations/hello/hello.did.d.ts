@@ -1,9 +1,5 @@
 import type { Principal } from '@dfinity/principal';
-export interface Message {
-  'content' : string,
-  'author' : string,
-  'sinced' : Time,
-}
+export interface Message { 'text' : string, 'time' : Time, 'author' : string }
 export type Time = bigint;
 export interface _SERVICE {
   'follow' : (arg_0: Principal) => Promise<undefined>,

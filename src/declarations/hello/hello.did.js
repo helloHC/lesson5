@@ -1,9 +1,9 @@
 export const idlFactory = ({ IDL }) => {
   const Time = IDL.Int;
   const Message = IDL.Record({
-    'content' : IDL.Text,
+    'text' : IDL.Text,
+    'time' : Time,
     'author' : IDL.Text,
-    'sinced' : Time,
   });
   return IDL.Service({
     'follow' : IDL.Func([IDL.Principal], [], []),

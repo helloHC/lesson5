@@ -1,4 +1,14 @@
+
+import { Actor, HttpAgent } from "@dfinity/agent";
 import { hello } from "../../declarations/hello";
+import { idlFactory as hello_idl, canisterId as hello_id } from "../../declarations/hello";
+
+const agent = new HttpAgent();
+
+const bridge = (canisterId) => {
+  const hello = Actor.createActor(hello_idl, { agent, canisterId })
+  return hello
+}
 
 const padding = (s, len, isZero) => {
   if (isZero) {
@@ -70,8 +80,8 @@ async function post() {
 }
 
 // let num_posts = 0;
-const getPostsList = async () => {
-  return await hello.timeline(new Date().getTime());
+const getTimelineList = async () => {
+  return await hello.timeline(0);
 }
 
 const renderPostsList = _posts => {
@@ -80,8 +90,8 @@ const renderPostsList = _posts => {
   posts_section.replaceChildren([]);
   _posts.forEach(item => {
     const post = document.createElement("p");
-    const time = formatData(parseInt(item.sinced.toString().substring(0, 10)));
-    post.innerText = `${item.content}---${time}---${item.author}`;
+    const time = formatData(parseInt(item.time.toString().substring(0, 10)));
+    post.innerText = `${item.text}---${time}---${item.author}`;
     fragement.appendChild(post);
   })
   posts_section.appendChild(fragement);
@@ -108,16 +118,27 @@ const getFollowList = async () => {
   try {
     const res = await hello.follows();
     const fragement = document.createDocumentFragment();
-    res.forEach(principal => {
-      const follower = document.createElement("p");
-      follower.innerText = principal.toString();
-      follower.setAttribute('principal', principal.toString())
-      fragement.appendChild(follower);
+    const pro = res.map(async principal => {
+      try {
+        await bridge(principal).get_name().then(name => {
+          const follower = document.createElement("p");
+          follower.innerText = `${principal.toString()}---${name}`;
+          follower.setAttribute('name', name);
+          fragement.appendChild(follower);
+        })
+      } catch (err) {
+
+      }
     })
+    await Promise.all(pro);
     document.querySelector(".follow-list").appendChild(fragement)
   } catch (error) {
     console.log(error);
   }
+}
+
+const getName = async () => {
+  const res = await hello.get_name()
 }
 
 function load() {
@@ -126,7 +147,7 @@ function load() {
   // load_posts();
   // setInterval(load_posts, 3000);
   let postsList;
-  getPostsList().then(res => {
+  getTimelineList().then(res => {
     postsList = res;
     renderPostsList(res)
   }).catch(err => {
@@ -141,7 +162,7 @@ function load() {
 
   document.querySelector(".follow-list").addEventListener('click', function (e) {
     const _this = e.target;
-    postsList && postsList.filter(item => item.author === _this.getAttribute('principal')).forEach(item => renderPostsList([item]))
+    renderPostsList(postsList && postsList.filter(item => item.author === _this.getAttribute('name')))
   })
 
   document.querySelector(".reset-btn").addEventListener('click', function (e) {

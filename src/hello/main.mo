@@ -5,8 +5,8 @@ import Time "mo:base/Time";
 
 actor Microblog {
     public type Message = {
-        content: Text;
-        sinced: Time.Time;
+        text: Text;
+        time: Time.Time;
         author: Text;
     };
 
@@ -31,16 +31,15 @@ actor Microblog {
 
     stable var messages: List.List<Message> = List.nil();
 
-    public shared func post(otp: Text, content: Text): async () {
-        // assert(Principal.toText(msg.caller) == "l6z5v-7lcmi-tzj4u-362dn-2tvfs-7slx3-hlc6m-k7hsn-6nno2-gtdiw-rqe");
+    public shared func post(otp: Text, text: Text): async () {
         assert(otp == "111");
-        let sinced = Time.now();
+        let time = Time.now();
         let author = Principal.toText(Principal.fromActor(Microblog));
-        messages := List.push({ content; sinced; author }, messages);
+        messages := List.push({ text; time; author }, messages);
     };
 
     public shared query func posts(since: Time.Time): async [Message] {
-        List.toArray(List.filter<Message>(messages, func ({sinced}) = sinced >= since))
+        List.toArray(List.filter<Message>(messages, func ({time}) = time >= since))
     };
 
     public shared func timeline(since: Time.Time): async [Message] {

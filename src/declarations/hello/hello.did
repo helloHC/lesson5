@@ -2,8 +2,8 @@ type Time = int;
 type Message = 
  record {
    author: text;
-   content: text;
-   sinced: Time;
+   "text": text;
+   time: Time;
  };
 service : {
   follow: (principal) -> ();
